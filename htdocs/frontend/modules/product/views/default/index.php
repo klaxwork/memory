@@ -157,7 +157,7 @@ $this->context->page_noindexing = $oContent->is_seo_noindexing;
 <?php } ?>
 
 <script type="application/javascript">
-
+	let time_keypress_search = performance.now();
 	//время последнего нажатия на кнопку
 	let c = performance.now();
 	console.log('time_keypress_search', time_keypress_search);
@@ -205,9 +205,7 @@ $this->context->page_noindexing = $oContent->is_seo_noindexing;
 				$('#ProductTemplate').tmpl(response.products).appendTo('#Products');
 				$('.preloader').hide();
 				$('#Products').show();
-			}
-
-			,
+			},
 			error: function (data, key, value) {
 				console.log("ОТВЕТ СЕРВЕРА НЕ РАСПОЗНАН");
 				console.log("data", data);
