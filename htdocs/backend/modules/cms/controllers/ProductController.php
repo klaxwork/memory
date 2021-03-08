@@ -75,7 +75,8 @@ class ProductController extends BackendController
 
     public function actionIndex() {
         M::printr('ProductController/actionIndex()');
-        $this->render('index');
+
+        //return $this->render('index');
     }
 
     public function actionList() {
@@ -339,11 +340,12 @@ class ProductController extends BackendController
                     $oProduct = new Product();
                 }
             }
-
+            //M::printr('1');
             $oProduct->setAttributes($_POST[$formName]);
             //M::printr($oProduct, '$oProduct');
 
             $oProduct->save();
+            //M::printr('2');
 
             //картинки
             $images = [];
@@ -353,7 +355,7 @@ class ProductController extends BackendController
 
             //картинки base64
             if (1) {
-                if (strlen($oProduct->description) > 100000) {
+                if (strlen($oProduct->description) > 10000) {
                     $description = $oProduct->description;
                     //M::printr(htmlspecialchars($description), 'htmlspecialchars($description)');
                     $posBase64 = strpos($description, ';base64,');
@@ -364,6 +366,7 @@ class ProductController extends BackendController
                     //M::printr($oStores, '$oStores');
                     $oProduct->description = $description;
                     $oProduct->save();
+                    //M::printr('> 10000');
 
                     foreach ($oStores as $oStore) {
                         $image = [
@@ -374,6 +377,7 @@ class ProductController extends BackendController
                     }
                 }
             }
+            //M::printr('3');
 
             $on_view_position = 100;
             //пройти по всем картинкам
@@ -402,6 +406,7 @@ class ProductController extends BackendController
                 $res = $oStore->bindToProduct($oProduct->id, $on_view_position);
                 $on_view_position += 100;
             }
+            //M::printr('4');
 
             if (0) {
                 //стоп
@@ -412,6 +417,8 @@ class ProductController extends BackendController
                 $elastic = $this->checkElasticItem($oProduct);
                 $JS['elastic'] = $elastic;
             }
+            //M::printr('5');
+
             $JS['result'] = $oProduct->attributes;
             if (1) {
                 $transaction->commit();
@@ -421,7 +428,7 @@ class ProductController extends BackendController
         } catch (yii\base\Exception $e) {
             $JS['success'] = false;
             $JS['messages'] = $e;
-            M::printr($e, '$e');
+            //M::printr($e, '$e');
             $transaction->rollback();
         }
 
@@ -755,15 +762,17 @@ class ProductController extends BackendController
             ]
         ];
         $model = ElSearch::find()->query($params)->one();
-
+        //M::printr("4.1");
         if (!empty($model)) {
             //если найден
             //обновить $oProduct в ElasticSearch
             $this->updateElasticItem($oProduct, $model);
+            //M::printr("4.2");
             return $model;
         } else {
             //если не найден
             //добавить $oProduct в ElasticSearch
+            //M::printr("4.3");
             return $this->createElasticItem($oProduct);
         }
     }
@@ -774,13 +783,20 @@ class ProductController extends BackendController
 
     public function createElasticItem($oProduct) {
         $model = new ElSearch();
+        //M::printr("4.3.1");
         $model->attributes = [
             'id' => $oProduct->id,
             'product_id' => $oProduct->id,
             'title' => strip_tags($oProduct->title),
             'description' => strip_tags($oProduct->description),
         ];
-        $model->save();
+        //M::printr($model->validate(), '$model->validate()');
+        //M::printr($model, '$model');
+        if (!$model->save()) {
+            M::printr($model->getErrors(), '$model->getErrors()');
+        }
+        //$model->save();
+        //M::printr("4.3.2");
         //M::printr($model, '$model');
         return $model;
     }

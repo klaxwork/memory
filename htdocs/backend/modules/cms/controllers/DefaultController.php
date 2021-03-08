@@ -3,6 +3,7 @@
 namespace backend\modules\cms\controllers;
 
 use common\components\M;
+use common\models\ElSearch;
 use common\models\models\CmsTree;
 use common\models\models\EcmProducts;
 use yii\helpers\Json;
@@ -194,5 +195,11 @@ class DefaultController extends BackendController
     public function actionUnbindNoms() {
         M::printr($_POST, '$_POST');
         exit;
+    }
+
+    public function actionClearIndex(){
+        ElSearch::deleteIndex();
+        ElSearch::createIndex();
+
     }
 }

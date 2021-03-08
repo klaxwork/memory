@@ -18,7 +18,7 @@ use yii\web\Cookie;
 /**
  * Site controller
  */
-class SiteController extends BackendController
+class DashboardController extends BackendController
 {
     /**
      * @inheritdoc
@@ -69,66 +69,69 @@ class SiteController extends BackendController
      * @return string
      */
     public function actionIndex() {
-        //M::printr('SiteController/Index > DashboardController/Index');
-        return $this->redirect('dashboard/index');
-        exit;
+        //M::printr('???');
+        if (0) {
+            exit;
 
-        return $this->redirect('/cms/product/list');
+            return $this->redirect('/cms/product/list');
 
-        $storage = Yii::getAlias('@storage');
-        M::printr($storage, '$storage');
+            $storage = Yii::getAlias('@storage');
+            M::printr($storage, '$storage');
 
-        $target = "..\..\..\.rawdata\\fd\\26\\duQh9h0Ux8E.png";
-        M::printr($target, '$target');
+            $target = "..\..\..\.rawdata\\fd\\26\\duQh9h0Ux8E.png";
+            M::printr($target, '$target');
 
-        $link = "{$storage}/private/fd/26/duQh9h0Ux8E.png";
-        M::printr($link, '$link');
-
-
-        $alias = symlink(
-            $target,
-            $link
-        );
-        M::printr($alias, '$alias');
+            $link = "{$storage}/private/fd/26/duQh9h0Ux8E.png";
+            M::printr($link, '$link');
 
 
-        exit;
-
-        $storage = Yii::getAlias('@storage');
-        M::printr($storage, '$storage');
-
-        $target = "{$storage}/x1.php";
-        $link = "{$storage}/x2.php";
-        symlink($target, $link);
-        M::printr(readlink($link), 'readlink($link)');
-
-        $target = "{$storage}/public";
-        $link = "{$storage}/public2";
-        symlink($target, $link);
-        M::printr(readlink($link), 'readlink($link)');
-
-        exit;
+            $alias = symlink(
+                $target,
+                $link
+            );
+            M::printr($alias, '$alias');
 
 
-        if (isset($_GET['chmod'])) {
-            $res = system('chmod -R 0777 /srv/vhosts/fishmen/fs.test/htdocs/var/storage/.rawdata/* > /srv/vhosts/fishmen/fs.test/htdocs/var/storage/chmod-rawdata.txt', $x);
-            $res = system('chmod -R 0777 /srv/vhosts/fishmen/fs.test/htdocs/var/storage/private/* > /srv/vhosts/fishmen/fs.test/htdocs/var/storage/chmod-private.txt', $x);
+            exit;
+
+            $storage = Yii::getAlias('@storage');
+            M::printr($storage, '$storage');
+
+            $target = "{$storage}/x1.php";
+            $link = "{$storage}/x2.php";
+            symlink($target, $link);
+            M::printr(readlink($link), 'readlink($link)');
+
+            $target = "{$storage}/public";
+            $link = "{$storage}/public2";
+            symlink($target, $link);
+            M::printr(readlink($link), 'readlink($link)');
+
+            exit;
+
+
+            if (isset($_GET['chmod'])) {
+                $res = system('chmod -R 0777 /srv/vhosts/fishmen/fs.test/htdocs/var/storage/.rawdata/* > /srv/vhosts/fishmen/fs.test/htdocs/var/storage/chmod-rawdata.txt', $x);
+                $res = system('chmod -R 0777 /srv/vhosts/fishmen/fs.test/htdocs/var/storage/private/* > /srv/vhosts/fishmen/fs.test/htdocs/var/storage/chmod-private.txt', $x);
+            }
+            return $this->render('index');
+            exit;
+
+            $tm1 = microtime(true);
+            Scripts::generateCats();
+            $tm2 = microtime(true);
+            M::printr($tm2 - $tm1, '$tm2 - $tm1');
+            exit;
+
+            $oProduct = EcmProducts::findOne(454);
+            $oVendor = $oProduct->getField('1c_product_vendor');
+            M::printr($oVendor, '$oVendor');
+            $oFields = $oProduct->getProductFields();
+            M::printr($oFields, '$oFields');
+            exit;
+
+            return $this->render('index');
         }
-        return $this->render('index');
-        exit;
-
-        $tm1 = microtime(true);
-        Scripts::generateCats();
-        $tm2 = microtime(true);
-        M::printr($tm2 - $tm1, '$tm2 - $tm1');
-        exit;
-
-        $oProduct = EcmProducts::findOne(454);
-        $oVendor = $oProduct->getField('1c_product_vendor');
-        M::printr($oVendor, '$oVendor');
-        $oFields = $oProduct->getProductFields();
-        M::printr($oFields, '$oFields');
-        exit;
 
         return $this->render('index');
     }

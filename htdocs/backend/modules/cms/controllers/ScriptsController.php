@@ -27,8 +27,7 @@ class ScriptsController extends BackendController
 {
     //public $layout = '//layouts/ct-default';
 
-    public function beforeAction($action)
-    {
+    public function beforeAction($action) {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
     }
@@ -36,18 +35,18 @@ class ScriptsController extends BackendController
     /**
      * Перенос url_alias из cms_node_content.url_alias в cms_tree.url_alias
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $oNodes = CmsTree::find()
             ->joinWith([
                 'content'
-            ])
+            ]
+            )
             ->orderBy(['id' => 'ASC'])
             ->all();
         M::printr(count($oNodes), 'count($oNodes)');
 
         foreach ($oNodes as $oNode) {
-            if(!empty($oNode->content)){
+            if (!empty($oNode->content)) {
                 $oNode->url_alias = $oNode->content->url_alias;
                 $oNode->save();
             }

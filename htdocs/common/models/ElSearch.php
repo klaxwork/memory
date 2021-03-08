@@ -158,6 +158,19 @@ class ElSearch extends ElasticActiveRecord
         $command->setMapping(static::index(), static::type(), static::mapping());
     }
 
+    public static function deleteIndex($indexForDel = false) {
+        M::printr('Удаление индекса');
+        $db = static::getDb('elasticsearch');
+        //M::printr($db, '$db');
+        $command = $db->createCommand();
+        $index = static::index();
+        M::printr($index, '$index');
+        if ($indexForDel) {
+            $index = $indexForDel;
+        }
+        $command->deleteIndex($index, static::type());
+    }
+
     public static function createIndex() {
         M::printr('Создание индекса');
         $db = static::getDb('elasticsearch');
@@ -177,19 +190,6 @@ class ElSearch extends ElasticActiveRecord
 //'creation_date' => '...'
             ]
         );
-    }
-
-    public static function deleteIndex($indexForDel = false) {
-        M::printr('Удаление индекса');
-        $db = static::getDb('elasticsearch');
-        //M::printr($db, '$db');
-        $command = $db->createCommand();
-        $index = static::index();
-        M::printr($index, '$index');
-        if ($indexForDel) {
-            $index = $indexForDel;
-        }
-        $command->deleteIndex($index, static::type());
     }
 
     public function getProduct() {
